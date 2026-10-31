@@ -1,0 +1,47 @@
+{
+  "enabled": {
+    "description": "Let her see her rice (balance)",
+    "type": "bool",
+    "default": true,
+    "hint": "The rice_check tool (only in the owner's private chat), the regular balance record and the low-rice note."
+  },
+  "check_hours": {
+    "description": "Record the balance every N hours",
+    "type": "float",
+    "default": 3,
+    "hint": "The daily spending and the days left come from the differences. Checking the balance is free."
+  },
+  "trend_days": {
+    "description": "Days the average is taken over",
+    "type": "int",
+    "default": 7
+  },
+  "warn_days": {
+    "description": "Tell her it is running low below N days left",
+    "type": "float",
+    "default": 5,
+    "hint": "At most once a day, only in the owner's private chat."
+  },
+  "warn_balance": {
+    "description": "Or below this balance",
+    "type": "float",
+    "default": 3
+  },
+  "merge_minutes": {
+    "description": "Merge records within N minutes when the balance did not change",
+    "type": "int",
+    "default": 30
+  },
+  "deepseek_api_key": {
+    "description": "DeepSeek API key (optional)",
+    "type": "string",
+    "default": "",
+    "hint": "Empty: the key of AstrBot's DeepSeek provider (api.deepseek.com) is used."
+  },
+  "owner_ids": {
+    "description": "Owner user IDs (only without memory-core)",
+    "type": "list",
+    "default": [],
+    "hint": "With memory-core its owner_ids are used."
+  }
+}
