@@ -3,4 +3,4 @@ display_name: rice-bowl
 desc: The persona can see how much "rice" (its DeepSeek balance) it has left, what it eats a day and how long it lasts; it is told once a day when the rice runs low. Only in the owner's private chat.
 author: JikunLiu101
 version: 0.1.0
-repo: ""
+repo: https://github.com/JikunLiu101/rice-bowl

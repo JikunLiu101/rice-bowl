@@ -43,27 +43,27 @@ def test_eating_and_topping_up():
 def test_too_little_history_says_so():
     r = report([snap(0, 10.0), snap(2, 9.9)], T0 + timedelta(hours=2))
     assert r.per_day is None and r.days_left is None and r.today_since == T0
-    text = report_text(r, "爸爸")
+    text = report_text(r, "主人")
     assert "还剩 ¥9.90" in text and "记账才刚开始" in text and "从 09:00 开始记" in text
-    first = report_text(report([snap(0, 10.0)], T0), "爸爸")
+    first = report_text(report([snap(0, 10.0)], T0), "主人")
     assert "09:00 才开始记账" in first and "¥0.00" not in first
 
 
 def test_report_text_with_tokens_and_trend():
     items = [snap(0, 10.0), snap(24, 9.0), snap(48, 8.0)]
     r = report(items, T0 + timedelta(hours=48))
-    text = report_text(r, "爸爸", [(date(2026, 11, 2), 350000, 210000), (date(2026, 11, 3), 8000, 0)])
+    text = report_text(r, "主人", [(date(2026, 11, 2), 350000, 210000), (date(2026, 11, 3), 8000, 0)])
     assert "还能吃大约 8 天" in text and "35.0万（60% 命中缓存）" in text and "大白饭" in text
 
 
 def test_low_note_only_when_running_low():
     long_ok = report([snap(0, 30.0), snap(24, 29.0)], T0 + timedelta(hours=24))
-    assert low_note(long_ok, "爸爸", warn_days=5, warn_balance=3) == ""
+    assert low_note(long_ok, "主人", warn_days=5, warn_balance=3) == ""
     low = report([snap(0, 4.0), snap(24, 3.0)], T0 + timedelta(hours=24))
-    note = low_note(low, "爸爸", warn_days=5, warn_balance=3)
+    note = low_note(low, "主人", warn_days=5, warn_balance=3)
     assert note.startswith("<rice_bowl>") and "大约还能吃 3 天" in note
     poor = report([snap(0, 1.0)], T0)
-    assert "还剩 ¥1.00" in low_note(poor, "爸爸", warn_days=5, warn_balance=3)
+    assert "还剩 ¥1.00" in low_note(poor, "主人", warn_days=5, warn_balance=3)
 
 
 def test_strip_blocks_cleans_old_notes():
