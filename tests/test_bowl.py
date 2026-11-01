@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 
-from rice.bowl import Ledger, Snapshot, low_note, meals, parse_balance, report, report_text, strip_blocks
+from rice.bowl import (Ledger, Snapshot, low_note, meals, panel_data, parse_balance, report, report_text,
+                       strip_blocks)
 
 T0 = datetime(2026, 11, 1, 9, 0).astimezone()
 
@@ -73,3 +74,18 @@ def test_strip_blocks_cleans_old_notes():
     assert strip_blocks(ctx, ("rice_bowl",)) == 2
     assert ctx[0]["content"] == "饭够吗" and ctx[1]["content"] == "<rice_bowl>x</rice_bowl>"
     assert ctx[2]["content"] == [{"type": "text", "text": "hi"}]
+
+
+def test_panel_data_for_the_dashboard():
+    items = [snap(0, 10.0), snap(12, 9.0), snap(24, 8.0), snap(30, 20.0), snap(48, 18.0)]
+    now = T0 + timedelta(hours=50)
+    d = panel_data(items, now, token_days=[(date(2026, 11, 2), 1000, 900), (date(2026, 11, 3), 0, 0)])
+    assert not d["empty"] and d["balance"] == 18.0 and d["checks"] == 5
+    assert [t["amount"] for t in d["topups"]] == [12.0]  # 8 -> 20
+    assert [s["mark"] != "" for s in d["series"]] == [False, False, False, True, False]
+    assert sum(r["eaten"] for r in d["daily"]) == 4.0  # 1 + 1 + 2; the top-up interval shows no eating
+    assert d["daily"][0]["partial"] and d["daily"][-1]["partial"]
+    assert d["tokens"] == [{"date": "2026-11-02", "input": 1000, "cached": 900, "hit": 90},
+                           {"date": "2026-11-03", "input": 0, "cached": 0, "hit": None}]
+    nothing = panel_data([], now)
+    assert nothing["empty"] and nothing["tokens"] == []

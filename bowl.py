@@ -15,6 +15,10 @@ from pathlib import Path
 CURRENCY_SIGN = {"CNY": "¥", "USD": "$"}
 
 
+class BalanceError(Exception):
+    """Why the balance could not be read, in words she can pass on."""
+
+
 @dataclass
 class Snapshot:
     at: str  # ISO time
@@ -160,6 +164,56 @@ def report(items: list[Snapshot], now: datetime, days: int = 7) -> Report | None
                   today=eaten_between(items, max(midnight, first), now), days=per_day_rows, per_day=per_day,
                   days_left=days_left, last_topup=tops[-1] if tops else None,
                   today_since=first if first > midnight else None)
+
+
+def panel_data(items: list[Snapshot], now: datetime, *, trend_days: int = 7, days: int = 14,
+               series_days: int = 30, token_days: list[tuple[date, int, int]] = (),
+               warn_days: float = 5, warn_balance: float = 3) -> dict:
+    """Everything the dashboard shows, as plain data: the numbers of `report`, the balance over time (top-ups
+    marked), what was eaten each day, the top-ups, and the tokens of the chats."""
+    r = report(items, now, days=trend_days)
+    if r is None:
+        return {"empty": True, "tokens": _token_rows(token_days)}
+    first = items[0].when
+    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    tops = {m.end: m.topped for m in meals(items) if m.topped >= 0.01}
+    since = now - timedelta(days=series_days)
+    series = [{"t": s.at, "v": round(s.total, 4),
+               "mark": f"充了约 {money(tops[s.when], s.currency)}" if s.when in tops else ""}
+              for s in items if s.when >= since]
+    daily = []
+    for k in range(days - 1, -1, -1):
+        d0 = midnight - timedelta(days=k)
+        if d0 + timedelta(days=1) <= first:
+            continue
+        daily.append({"date": d0.date().isoformat(),
+                      "eaten": round(eaten_between(items, max(d0, first), min(d0 + timedelta(days=1), now)), 4),
+                      "partial": d0 < first or k == 0})
+    low = low_note(r, "", warn_days=warn_days, warn_balance=warn_balance) != ""
+    return {
+        "empty": False,
+        "currency": r.currency,
+        "balance": round(r.balance, 4),
+        "today": round(r.today, 4),
+        "today_since": r.today_since.isoformat() if r.today_since else "",
+        "per_day": round(r.per_day, 4) if r.per_day is not None else None,
+        "days_left": round(r.days_left, 1) if r.days_left is not None else None,
+        "since": first.isoformat(),
+        "last_check": items[-1].at,
+        "checks": len(items),
+        "low": low,
+        "warn_days": warn_days,
+        "warn_balance": warn_balance,
+        "series": series,
+        "daily": daily,
+        "topups": [{"at": at.isoformat(), "amount": round(v, 4)} for at, v in sorted(tops.items())][-10:],
+        "tokens": _token_rows(token_days),
+    }
+
+
+def _token_rows(token_days) -> list[dict]:
+    return [{"date": d.isoformat(), "input": n_in, "cached": cached,
+             "hit": round(cached * 100 / n_in) if n_in else None} for d, n_in, cached in token_days]
 
 
 def money(x: float, currency: str = "CNY") -> str:

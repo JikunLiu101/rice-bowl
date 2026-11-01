@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>饭碗</title>
+  <link rel="stylesheet" href="kit.css">
+  <script src="/api/plugin/page/bridge-sdk.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="head">
+      <div>
+        <h1>饭碗</h1>
+        <div class="sub">她的“饭”：DeepSeek 余额，每天吃多少、还能吃几天</div>
+      </div>
+      <div class="row">
+        <button id="check">现在查一次</button>
+        <button id="refresh" class="ghost">刷新</button>
+      </div>
+    </header>
+
+    <div id="error" class="error" hidden></div>
+    <div id="notes"></div>
+    <div id="cards" class="cards"></div>
+
+    <div class="panel">
+      <h2>余额变化（最近 30 天，绿点是充值）</h2>
+      <div id="series"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h2>每天吃了多少</h2>
+        <div id="daily"></div>
+      </div>
+      <div class="panel">
+        <h2>聊天用的 token（每天）</h2>
+        <div id="tokens"></div>
+        <div class="small muted">只算和人聊天的回复（AstrBot 的统计），不含整理记忆、写日记、上网这些后台调用。命中缓存的那部分便宜很多。</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>充值记录</h2>
+      <div id="topups"></div>
+    </div>
+    <div id="foot" class="small muted"></div>
+  </div>
+  <script src="kit.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

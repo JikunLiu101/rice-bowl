@@ -33,6 +33,12 @@ DeepSeek 只告诉“现在还剩多少”。插件每隔几小时（`check_hour
 - AstrBot，配好 DeepSeek 提供商（或者在插件设置里填 key）；
 - 推荐配合[记忆核心](https://github.com/JikunLiu101/astrbot_plugin_memory_core)（memory-core）：用它的主人 ID 和称呼。没有时用插件设置里的 `owner_ids`，称呼“主人”。
 
+## 后台面板
+
+AstrBot 4.24.2 起，后台「插件 → 饭碗 → 视图 → 饭量」：现在还剩多少、今天和平均每天吃多少、还能吃几天、上次充值；
+最近 30 天的余额曲线（充值标成绿点）、每天吃了多少、最近每天聊天用的 token 和命中缓存的比例、充值记录；
+一个“现在查一次”按钮（和定时记账一样，查余额不收费）。key 不会发到页面上。
+
 ## 支持的平台
 
 只用 AstrBot 的通用消息事件，不依赖哪个平台独有的功能。需要的是：私聊里认得出谁是主人（这是主人的钱包，只在主人私聊里能看）。余额只支持 DeepSeek。元数据里列的是满足这些的主流平台：Telegram、QQ（OneBot / aiocqhttp）、Discord、KOOK、飞书、钉钉、企业微信、Slack。**实际测过的只有 Telegram 和 AstrBot 自带的网页对话**，其他平台欢迎反馈。需要 AstrBot 4.24.2 及以上。

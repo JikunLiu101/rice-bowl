@@ -34,5 +34,11 @@
       "description": "主人的用户 ID（只在没装 memory-core 时用）",
       "hint": "装了 memory-core 就用它的。"
     }
+  },
+  "pages": {
+    "rice": {
+      "title": "饭量",
+      "description": "余额曲线、每天吃了多少、还能吃几天、聊天的 token 和缓存命中"
+    }
   }
 }

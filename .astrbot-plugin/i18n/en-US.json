@@ -3,5 +3,11 @@
     "display_name": "rice-bowl",
     "short_desc": "Sees its own DeepSeek balance: what it eats a day and how long it lasts",
     "desc": "The persona can see how much \"rice\" (its DeepSeek balance) it has left, what it eats a day and how long it lasts; it is told once a day when the rice runs low. Only in the owner's private chat."
+  },
+  "pages": {
+    "rice": {
+      "title": "Rice",
+      "description": "Balance over time, what it eats a day, how long it lasts, chat tokens and cache hits"
+    }
   }
 }

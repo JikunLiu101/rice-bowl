@@ -3,7 +3,7 @@ display_name: 饭碗
 short_desc: "角色能看自己还剩多少“饭”（DeepSeek 余额）、每天吃多少、还能吃几天"
 desc: "主人说起大白饭、吃饭、充 token 时，角色可以用 rice_check 看自己的 DeepSeek 余额、今天和最近几天吃了多少、平均每天多少、还能吃几天、上次什么时候充的。每隔几小时记一次余额算出趋势；快吃完时，在主人私聊里每天提醒她一次。只在主人私聊里能看。 The persona can see how much \"rice\" (its DeepSeek balance) it has left, what it eats a day and how long it lasts; it is told once a day when the rice runs low. Only in the owner's private chat."
 author: JikunLiu101
-version: 0.1.1
+version: 0.2.0
 repo: https://github.com/JikunLiu101/rice-bowl
 astrbot_version: ">=4.24.2"
 support_platforms:

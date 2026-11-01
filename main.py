@@ -22,7 +22,8 @@ from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.provider import ProviderRequest
 from astrbot.core.agent.message import TextPart
 
-from .bowl import Ledger, low_note, parse_balance, report, report_text, strip_blocks
+from .bowl import BalanceError, Ledger, low_note, panel_data, parse_balance, report, report_text, strip_blocks
+from .panel import Panel
 
 PLUGIN_NAME = "astrbot_plugin_rice_bowl"
 MEMORY_CORE = "astrbot_plugin_memory_core"
@@ -33,10 +34,6 @@ def _now() -> datetime:
     return datetime.now().astimezone()
 
 
-class BalanceError(Exception):
-    """Why the balance could not be read, in words she can pass on."""
-
-
 class RiceBowl(star.Star):
     def __init__(self, context: star.Context, config: dict | None = None) -> None:
         super().__init__(context, config)
@@ -45,6 +42,10 @@ class RiceBowl(star.Star):
         self._task: asyncio.Task | None = None
         self._lock = asyncio.Lock()
         self.last_error = ""
+        try:
+            Panel(self).register()
+        except Exception as exc:  # noqa: BLE001 - the dashboard is optional
+            logger.warning(f"[rice-bowl] dashboard not registered: {exc}")
 
     async def initialize(self) -> None:
         if self.cfg.get("enabled", True):
@@ -142,6 +143,12 @@ class RiceBowl(star.Star):
 
     def _report(self):
         return report(Ledger.load(self.path).items(), _now(), days=int(self.cfg.get("trend_days", 7)))
+
+    def panel_data(self) -> dict:
+        """What the dashboard shows (see bowl.panel_data)."""
+        return panel_data(Ledger.load(self.path).items(), _now(), trend_days=int(self.cfg.get("trend_days", 7)),
+                          token_days=self._token_days(14), warn_days=float(self.cfg.get("warn_days", 5)),
+                          warn_balance=float(self.cfg.get("warn_balance", 3)))
 
     # ---------------------------------------------------------------- tokens of the recent chats (AstrBot's stats)
 
