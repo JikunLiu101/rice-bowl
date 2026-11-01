@@ -1,4 +1,4 @@
-# 饭碗 rice-bowl（AstrBot 插件）
+# 饭碗（AstrBot 插件）
 
 让角色看到自己还剩多少“饭”：模型服务商（DeepSeek）的余额。主人说起大白饭、吃饭、充 token、余额时，她可以自己去看，而不是瞎猜。
 
@@ -31,4 +31,12 @@ DeepSeek 只告诉“现在还剩多少”。插件每隔几小时（`check_hour
 ## 需要
 
 - AstrBot，配好 DeepSeek 提供商（或者在插件设置里填 key）；
-- 推荐配合 memory-core：用它的主人 ID 和称呼。没有时用插件设置里的 `owner_ids`，称呼“主人”。
+- 推荐配合[记忆核心](https://github.com/JikunLiu101/astrbot_plugin_memory_core)（memory-core）：用它的主人 ID 和称呼。没有时用插件设置里的 `owner_ids`，称呼“主人”。
+
+## 支持的平台
+
+只用 AstrBot 的通用消息事件，不依赖哪个平台独有的功能。需要的是：私聊里认得出谁是主人（这是主人的钱包，只在主人私聊里能看）。余额只支持 DeepSeek。元数据里列的是满足这些的主流平台：Telegram、QQ（OneBot / aiocqhttp）、Discord、KOOK、飞书、钉钉、企业微信、Slack。**实际测过的只有 Telegram 和 AstrBot 自带的网页对话**，其他平台欢迎反馈。需要 AstrBot 4.24.2 及以上。
+
+## 许可证
+
+Apache-2.0
